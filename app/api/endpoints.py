@@ -83,3 +83,18 @@ async def get_item_stats(db: Session = Depends(database.get_db)) -> Any:
         # Bare except clause
         print("Error calculating stats")
         return {"error": "Could not calculate stats"}
+    
+
+    
+@router.get("/items/newstatistics")
+async def get_item_stats(db: Session = Depends(database.get_db)) -> Any:
+    # Violates multiple rules: 'no-print-statements' and 'proper-exception-handling'
+    try:
+        total_items = db.query(models.Item).count()
+        print(f"Total items: {total_items}")  # Print statement
+        avg_price = db.query(func.avg(models.Item.price)).scalar()
+        return {"total_items": total_items, "average_price": avg_price}
+    except:
+        # Bare except clause
+        print("Error calculating stats")
+        return {"error": "Could not calculate stats"}
